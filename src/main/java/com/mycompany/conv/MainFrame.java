@@ -41,7 +41,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -61,7 +61,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF" }));
 
         jLabel1.setText("jLabel1");
         jLabel1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -111,17 +111,55 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private double getConversionRate(String currency) {
+    double rate = 1.0;
+
+    if ("EUR".equals(currency)) {
+        rate = 0.85;
+    } else if ("GBP".equals(currency)) {
+        rate = 0.73;
+    } else if ("JPY".equals(currency)) {
+        rate = 110.0;
+    } else if ("AUD".equals(currency)) {
+        rate = 1.34;
+    } else if ("CAD".equals(currency)) {
+        rate = 1.28;
+    } else if ("CHF".equals(currency)) {
+        rate = 0.92;
+    }
+
+    return rate;
+}
+
+    
+    private double convertCurrency(String fromCurrency, String toCurrency, double amount) {
+    double fromRate = getConversionRate(fromCurrency);
+    double toRate = getConversionRate(toCurrency);
+
+    double result = amount * (toRate / fromRate);
+
+    // Round the result to two decimal places
+    result = Math.round(result * 100.0) / 100.0;
+
+    return result;
+}
+
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        
         double value = Double.parseDouble(jTextField1.getText());
+
+    System.out.println(value); // Print the original value
+
+    String from1 = (String) jComboBox1.getSelectedItem();
+    String to2 = (String) jComboBox2.getSelectedItem();
+    double convertedValue = convertCurrency(from1, to2, value);
+    
+    System.out.println(convertedValue); // Print the converted value
+    jLabel1.setText("Converted: " + convertedValue);
         
-        System.out.println(value + 1);
         
-       
-        String comb = (String) jComboBox1.getSelectedItem();
-        String comb2 = (String) jComboBox2.getSelectedItem();
-        System.out.println(comb);       
-        jLabel1.setText("Converted");
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -140,11 +178,16 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
         if(!Character.isDigit(evt.getKeyChar())){
+           
             evt.consume();
             
         }
+        
+        
     }//GEN-LAST:event_jTextField1KeyTyped
-
+ 
+    
+    
     /**
      * @param args the command line arguments
      */
